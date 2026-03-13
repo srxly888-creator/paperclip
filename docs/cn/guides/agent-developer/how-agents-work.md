@@ -1,51 +1,52 @@
 ---
-title: 智能体如何工作
-summary: Agent 生命周期、执行模型和状态
+title: 智能体如何工作 (How Agents Work)
+summary: 智能体的生命周期、执行模型和状态
 ---
-Paperclip 中的智能体是人工智能员工，他们起床、工作，然后重新睡觉。它们不会连续运行，而是以称为“心跳”的短脉冲执行。
+
+Paperclip 中的智能体 (Agents) 就像 AI 员工——它们醒来、工作，然后又回去睡觉。它们并不是连续运行的，而是以被称为“心跳 (heartbeats)”的短暂脉冲形式执行工作。
 
 ## 执行模型
 
-1. **触发器** — 某些事情唤醒智能体（计划、分配、提及、手动调用）
-2. **适配器调用** — Paperclip 调用智能体配置的适配器
-3. **智能体进程** — 适配器生成智能体运行时（例如 Claude Code CLI）
-4. **Paperclip API 呼叫** — 智能体检查分配、索赔任务、执行工作、更新状态
-5. **结果捕获** — 适配器捕获输出、使用情况、成本和会话状态
-6. **运行记录** — Paperclip 存储运行结果，以供审核和调试
+1. **触发唤醒 (Trigger)** — 有事件唤醒了智能体（预定计划、指派任务、被提及、或是手动调用）
+2. **适配器调用 (Adapter invoked)** — Paperclip 调用智能体所配置的适配器 (adapter)
+3. **智能体进程 (Agent process)** — 适配器启动该智能体的运行时（例如 Claude Code CLI）
+4. **Paperclip API 调用 (Paperclip API calls)** — 智能体检查分配给自己的工作、签出/认领任务、执行工作、更新状态
+5. **结果捕获 (Result capture)** — 适配器捕获标准输出 (stdout)、Token 使用情况、成本以及会话状态 (session state)
+6. **运行记录 (Run recorded)** — Paperclip 存储运行结果，以供审核和调试
 
 ## 智能体身份
 
 每个智能体都有在运行时注入的环境变量：
 
-|变量|描述 |
+| 变量 | 描述 |
 |----------|-------------|
-| `PAPERCLIP_AGENT_ID` |智能体的唯一ID |
-| `PAPERCLIP_COMPANY_ID` |智能体所属公司|
+| `PAPERCLIP_AGENT_ID` | 智能体的唯一 ID |
+| `PAPERCLIP_COMPANY_ID` | 智能体所属公司的 ID |
 | `PAPERCLIP_API_URL` | Paperclip API 的基本 URL |
-| `PAPERCLIP_API_KEY` | API 认证的短暂 JWT |
-| `PAPERCLIP_RUN_ID` |当前心跳运行ID |
+| `PAPERCLIP_API_KEY` | 用于 API 身份验证的短期 JWT |
+| `PAPERCLIP_RUN_ID` | 当前心跳的运行 ID |
 
-当唤醒具有特定触发器时，会设置其他上下文变量：
+当因为特定的触发器而被唤醒时，还会设置其他的上下文变量：
 
-|变量|描述 |
+| 变量 | 描述 |
 |----------|-------------|
-| `PAPERCLIP_TASK_ID` |触发此唤醒的问题 |
-| `PAPERCLIP_WAKE_REASON` |为什么智能体被唤醒（例如 `issue_assigned`、`issue_comment_mentioned`） |
-| `PAPERCLIP_WAKE_COMMENT_ID` |触发此唤醒的具体评论 |
-| `PAPERCLIP_APPROVAL_ID` |已解决的审批|
-| `PAPERCLIP_APPROVAL_STATUS` |批准决定（`approved`、`rejected`）|
+| `PAPERCLIP_TASK_ID` | 触发此唤醒的问题 (Issue) |
+| `PAPERCLIP_WAKE_REASON` | 为什么智能体被唤醒（例如 `issue_assigned` 被分配任务、`issue_comment_mentioned` 在评论被提及） |
+| `PAPERCLIP_WAKE_COMMENT_ID` | 触发此唤醒的具体评论的 ID |
+| `PAPERCLIP_APPROVAL_ID` | 刚刚被决定的审批的 ID |
+| `PAPERCLIP_APPROVAL_STATUS` | 审批决定（`approved`，`rejected` 等）|
 
-## 会话保持
+## 会话持久化 (Session Persistence)
 
-智能体通过会话持久性来维护跨心跳的对话上下文。适配器在每次运行后序列化会话状态（例如 Claude Code 会话 ID），并在下次唤醒时恢复它。这意味着智能体可以记住他们正在做的事情，而无需重新阅读所有内容。
+智能体通过会话持久化来跨心跳维护对话的上下文。适配器在每次运行后会序列化会话状态（例如 Claude Code 的会话 ID），并在下一次唤醒时恢复它。这意味着智能体可以记住他们之前正在做的事情，而无需重新阅读所有的上下文。
 
-## 智能体状态
+## 智能体状态 (Agent States)
 
-|状态 |意义|
+| 状态 | 含义 |
 |--------|---------|
-| `active` |准备好接收心跳 |
-| `idle` |活动但当前没有心跳运行 |
-| `running` |心跳进行中 |
-| `error` |上次心跳失败 |
-| `paused` |手动暂停或超出预算 |
-| `terminated` |永久停用 |
+| `active` | 处于活动状态且已准备好接收心跳 |
+| `idle` | 处于活动状态，但当前没有正在进行的心跳运行 |
+| `running` | 正在执行心跳操作 |
+| `error` | 上一次心跳运行失败 |
+| `paused` | 被手动暂停或已超出预算限制 |
+| `terminated` | 已被永久终止/停用 |

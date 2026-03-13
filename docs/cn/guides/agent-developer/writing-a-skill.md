@@ -1,18 +1,19 @@
 ---
-title: 写技能
-summary: SKILL.md 格式和最佳实践
+title: 编写技能 (Writing a Skill)
+summary: SKILL.md 的格式与最佳实践
 ---
-技能是智能体可以在心跳期间调用的可重用指令。它们是教智能体如何执行特定任务的降价文件。
+
+技能 (Skills) 是智能体可以在其心跳期间调用的可重用指令。它们是 Markdown 文件，用于教会智能体如何执行特定的任务。
 
 ## 技能结构
 
-技能是一个包含 `SKILL.md` 文件的目录，该文件带有 YAML frontmatter：
+一个技能就是一个包含 `SKILL.md` 文件（带有 YAML 前言）的目录：
 
 ```
 skills/
 └── my-skill/
-    ├── SKILL.md          # Main skill document
-    └── references/       # Optional supporting files
+    ├── SKILL.md          # 主要的技能文档
+    └── references/       # 可选的支持文件
         └── examples.md
 ```
 
@@ -22,38 +23,38 @@ skills/
 ---
 name: my-skill
 description: >
-  Short description of what this skill does and when to use it.
-  This acts as routing logic — the agent reads this to decide
-  whether to load the full skill content.
+  关于该技能的作用以及何时使用它的简短描述。
+  它充当路由逻辑的基准 — 智能体会读取它来决定
+  是否要加载完整的技能内容。
 ---
 
 # My Skill
 
-Detailed instructions for the agent...
+给智能体的详细指令...
 ```
 
-### Frontmatter 字段
+### 前言 (Frontmatter) 字段
 
-- **名称** — 技能的唯一标识符（kebab-case）
-- **描述** — 告诉智能体何时使用此技能的路由描述。将其写为决策逻辑，而不是营销文案。
+- **name** — 技能的唯一标识符（使用 kebab-case 格式，如 `my-skill`）
+- **description** — 告诉智能体何时使用该技能的路由描述。将其写成决策逻辑，而不是用作营销文案。
 
-## 技能在运行时如何发挥作用
+## 技能在运行时如何工作
 
-1. 智能体在其上下文中查看技能元数据（名称+描述）
-2. Agent决定该技能是否与其当前任务相关
-3. 如果相关，智能体加载完整的 SKILL.md 内容
-4. Agent按照技能中的说明进行操作
+1. 智能体在其上下文中看到技能的元数据（名称 + 描述）
+2. 智能体决定该技能是否与其当前任务相关
+3. 如果相关，智能体将加载完整的 SKILL.md 内容
+4. 智能体遵循技能中的指令进行操作
 
-这使得基本提示很小——完整的技能内容仅按需加载。
+这使得基础的提示词 (base prompt) 保持小巧 — 完整的技能内容仅在需要时按需加载。
 
 ## 最佳实践
 
-- **将描述写入路由逻辑** — 包括“何时使用”和“何时不使用”指导
-- **具体且可操作** - 座席应该能够毫不含糊地遵循技能
-- **包含代码示例** — 具体的 API 调用和命令示例比散文更可靠
-- **保持技能集中** — 每个问题一项技能；不要合并不相关的程序
-- **谨慎参考文件** — 将支持细节放在 `references/` 中，而不是让主要的 SKILL.md 变得臃肿
+- **将描述写成路由逻辑** — 包括“何时使用”和“何时不使用”的指导
+- **具体且具有可操作性** — 智能体应该能够毫无歧义地遵循该技能
+- **包含代码示例** — 具体的 API 调用和命令示例比长篇大论更可靠
+- **保持技能的专注度** — 每一个关注点一个技能；不要将不相关的流程合并在一起
+- **谨慎地引用文件** — 将支持性的细节放在 `references/` 文件夹中，而不是让主要的 SKILL.md 变得臃肿
 
-## 技能注入
+## 技能注入 (Skill Injection)
 
-适配器负责使技能可供智能体运行时发现。 `claude_local` 适配器使用带有符号链接和 `--add-dir` 的临时目录。 `codex_local` 适配器使用全局技能目录。详情请参见【创建适配器】(/cn/adapters/creating-an-adapter)指南。
+适配器 (Adapters) 负责使其智能体运行时能够发现技能。`claude_local` 适配器使用带有符号链接和 `--add-dir` 命令的临时目录。`codex_local` 适配器使用全局技能目录。详情请参阅[创建适配器](/adapters/creating-an-adapter)指南。
