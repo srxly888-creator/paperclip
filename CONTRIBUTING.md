@@ -1,6 +1,6 @@
 # Contributing Guide
 
-English | [简体中文](./CONTRIBUTING.zh-CN.md) | [繁體中文](./CONTRIBUTING.zh-TW.md)
+English | [简体中文](./CONTRIBUTING.zh-CN.md)
 
 Thanks for wanting to contribute!
 

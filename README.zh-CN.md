@@ -4,8 +4,7 @@
 
 <p align="center">
   <a href="./README.md">English</a> |
-  <strong>简体中文</strong> |
-  <a href="./README.zh-TW.md">繁體中文</a>
+  <strong>简体中文</strong>
 </p>
 
 <p align="center">
