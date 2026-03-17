@@ -45,5 +45,6 @@ pnpm paperclipai run
 5. 设定下拨的经费预算 (Budgets) 以及初步发下第一批初始工作任务包单
 6. 点击确认开始 — 静静看着智能体们进入他们各自的节律心跳脉冲区间，您的“全自动 AI 公司”就彻底运转起来了
 
-<Card title="核心概念 (Core Concepts)" href="/start/core-concepts">
 <Card title="核心概念 (Core Concepts)" href="/zh-CN/start/core-concepts">
+  了解 Paperclip 背后的关键概念
+</Card>
